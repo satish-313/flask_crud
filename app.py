@@ -1,12 +1,13 @@
-from flask import Flask, request, Response, jsonify
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 app = Flask(__name__)
-app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:postgres@localhost:5432/flask"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+app.config["SQLALCHEMY_DATABASE_URI"]='postgresql://postgres:postgres@localhost/flask'
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+db = SQLAlchemy(app)
+migrate = Migrate(app,db)
 
 class candidate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -16,22 +17,9 @@ class candidate(db.Model):
     def __repr__(self):
         return '<candidate %r>' % self.username
 
-# run in python shell
-# >>> from app import db
-# >>> db.create_all()
-# >>> from app import candidate
-# >>> admin = candidate(username="admin",email="admin@gmail.com")
-# >>> guest = candidate(username="guest",email="guest@gmail.com")
-# >>> db.session.add(admin)
-# >>> db.session.add(guest)
-# >>> db.session.commit()
-# >>> candidate.query.all()
-
-
 @app.route('/')
 def main():
-    db.
     return 'Hello World!'
 
-# @app.route('/all_candidate')
-# def 
+if __name__ == '__main__':
+    app.run(debug=True,host='0.0.0.0')
